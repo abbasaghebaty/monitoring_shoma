@@ -100,8 +100,11 @@ export async function handleProductAdd({ env, chatId, args }) {
 
 export async function handlePurchase({ env, chatId, args }) {
   try {
-    const [supplier, itemsRaw, note = ""] = splitFields(args.join(" "));
-    if (!itemsRaw) throw new Error("قالب: /purchase تأمین‌کننده | شناسه:تعداد:خرید:فروش:مصرف;... | توضیح");
+    const [dateRaw, supplier, itemsRaw, note = ""] = splitFields(args.join(" "));
+    if (!dateRaw || !itemsRaw) throw new Error("قالب: /purchase تاریخ-میلادی-YYYY-MM-DD | تأمین‌کننده یا - | شناسه:تعداد:خرید:فروش:مصرف;... | توضیح");
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dateRaw) || new Date(dateRaw + "T00:00:00Z").toISOString().slice(0, 10) !== dateRaw) {
+      throw new Error("تاریخ خرید باید معتبر و با قالب YYYY-MM-DD باشد.");
+    }
     const items = parseItems(itemsRaw, true);
     const products = await Promise.all(items.map((x) => getProduct(env, x.productId)));
     for (let i = 0; i < items.length; i++) {
@@ -112,8 +115,8 @@ export async function handlePurchase({ env, chatId, args }) {
     const purchaseId = makeId();
     const statements = [
       env.DB.prepare(
-        "INSERT INTO purchases (id, supplier, purchase_date, total_amount, note) VALUES (?, ?, date('now'), ?, ?)"
-      ).bind(purchaseId, supplier === "-" ? null : (supplier || null), total, note || null),
+        "INSERT INTO purchases (id, supplier, purchase_date, total_amount, note) VALUES (?, ?, ?, ?, ?)"
+      ).bind(purchaseId, supplier === "-" ? null : (supplier || null), dateRaw, total, note || null),
       ...items.map((x) => env.DB.prepare(
         `INSERT INTO purchase_items (purchase_id, product_id, qty, purchase_price, sell_price, consumer_price)
          VALUES (?, ?, ?, ?, ?, ?)`
