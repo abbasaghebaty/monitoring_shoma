@@ -39,6 +39,6 @@ export async function handleStatus({ env, chatId, user }) {
   const todayIncome = todayWorked * HOURLY_RATE_TOMAN / 60;
   const monthIncome = monthWorked * HOURLY_RATE_TOMAN / 60;
   return sendMessage(env, chatId,
-    `📅 ${formatDate(now.toISOString(), tz)}\n\n${state}\nمجموع ساعت ثبت‌شده امروز: ${formatDuration(Math.max(done, todayWorked))}\n\n📊 مانیتورینگ درآمد\n💰 درآمد امروز: ${formatToman(todayIncome)}\n💰 درآمد این ماه: ${formatToman(monthIncome)}\n\nنرخ محاسبه: ساعتی ${formatToman(HOURLY_RATE_TOMAN)}`
+    `📅 ${formatDate(now.toISOString(), tz)}\n\n${state}\nمجموع ساعت ثبت‌شده امروز: ${formatDuration(Math.max(done, todayWorked))}\n\n📊 مانیتورینگ درآمد\n💰 درآمد امروز: ${formatToman(todayIncome)}\n💰 درآمد این ماه: ${formatToman(monthIncome)}`
   );
 }
