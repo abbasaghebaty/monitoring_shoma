@@ -264,6 +264,47 @@ function localStart(dayKey, tz) {
   return new Date(guess.getTime() - offset).toISOString();
 }
 
+
+export async function handleCustomerAdd({ env, chatId, args }) {
+  try {
+    const [name, phone = "", note = ""] = splitFields(args.join(" "));
+    if (!name) throw new Error("قالب: /customer_add نام مشتری | تلفن | توضیح");
+    const result = await env.DB.prepare(
+      "INSERT INTO customers (name, phone, note) VALUES (?, ?, ?)"
+    ).bind(name, phone || null, note || null).run();
+    return sendMessage(env, chatId, `✅ مشتری «${name}» ثبت شد. شناسه: #${result.meta?.last_row_id ?? "—"}`);
+  } catch (error) {
+    return replyError(env, chatId, error);
+  }
+}
+
+export async function handleCustomers({ env, chatId }) {
+  const { results } = await env.DB.prepare(
+    "SELECT id, name, phone FROM customers ORDER BY name COLLATE NOCASE LIMIT 50"
+  ).all();
+  const lines = (results || []).map((x) => `#${x.id} ${x.name}${x.phone ? ` — ${x.phone}` : ""}`);
+  return sendMessage(env, chatId, lines.length ? `👥 مشتریان\n\n${lines.join("\n")}` : "هنوز مشتری ثبت نشده است.");
+}
+
+export async function handleShortage({ env, chatId, args }) {
+  try {
+    const [productRaw, reasonRaw, note = ""] = splitFields(args.join(" "));
+    const productId = integer(productRaw, "شناسه محصول", { min: 1 });
+    const reason = (reasonRaw || "").toLowerCase();
+    if (!["customer_request", "sold_out"].includes(reason)) {
+      throw new Error("دلیل باید customer_request یا sold_out باشد.");
+    }
+    const product = await getProduct(env, productId);
+    if (!product) throw new Error("محصول پیدا نشد.");
+    await env.DB.prepare(
+      "INSERT INTO shortages (product_id, product_name, reason, note) VALUES (?, ?, ?, ?)"
+    ).bind(productId, product.name, reason, note || null).run();
+    return sendMessage(env, chatId, `✅ کسری «${product.name}» ثبت شد.`);
+  } catch (error) {
+    return replyError(env, chatId, error);
+  }
+}
+
 export async function handlePriceUpdate({ env, chatId, args }) {
   try {
     const [idRaw, sellRaw, consumerRaw] = splitFields(args.join(" "));
