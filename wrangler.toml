@@ -12,5 +12,9 @@ binding = "DB"
 database_name = "shop-manager"
 database_id = "4e406079-a02f-4412-9167-57ca03b29f85"
 
+[[kv_namespaces]]
+binding = "SESSION_KV"
+id = "f71b071ac7e6495a869c748cbcab4ed5"
+
 # Secret:
 # npx wrangler secret put BOT_TOKEN
