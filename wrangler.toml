@@ -3,8 +3,8 @@ main = "src/index.js"
 compatibility_date = "2026-10-01"
 
 [vars]
-OWNER_ID = "602217153"
-ADMIN_IDS = "602217153"
+OWNER_ID = "7548075013"
+ADMIN_IDS = "7548075013"
 TIMEZONE = "Asia/Tehran"
 
 [[d1_databases]]
