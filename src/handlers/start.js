@@ -15,7 +15,7 @@ export async function handleStart({ env, chatId, user }) {
 export async function handleHelp({ env, chatId, user }) {
   if (user?.role === "owner") {
     return sendMessage(env, chatId,
-      "دستورات مدیریت حضور و غیاب:\nگزارش امروز\nگزارش هفتگی\nنمودار\nکاربران\n/adduser <آیدی> <نام>\n\nدستورات انبار و فروش (فقط ADMIN_IDS):\n/products\n/customers\n/customer_add نام | تلفن | توضیح\n/shortage شناسه | customer_request یا sold_out | توضیح\n/product_add نام | خرید | فروش | مصرف‌کننده\n/purchase تأمین‌کننده | شناسه:تعداد:خرید:فروش:مصرف;... | توضیح\n/sale شناسه‌مشتری یا - | cash:مبلغ;card:مبلغ | شناسه:تعداد:قیمت;... | توضیح\n/debtpay شناسه‌بدهی | cash/card/transfer | مبلغ | توضیح\n/price شناسه | فروش | مصرف‌کننده\n/inventory_report");
+      "دستورات مدیریت حضور و غیاب:\nگزارش امروز\nگزارش هفتگی\nنمودار\nکاربران\n/adduser <آیدی> <نام>\n\nدستورات انبار و فروش (فقط ADMIN_IDS):\n/products\n/customers\n/customer_add نام | تلفن | توضیح\n/shortage شناسه | customer_request یا sold_out | توضیح\n/product_add نام | خرید | فروش | مصرف‌کننده\n/purchase تاریخ-میلادی-YYYY-MM-DD | تأمین‌کننده یا - | شناسه:تعداد:خرید:فروش:مصرف;... | توضیح\n/sale شناسه‌مشتری یا - | cash:مبلغ;card:مبلغ | شناسه:تعداد:قیمت;... | توضیح\n/debtpay شناسه‌بدهی | cash/card/transfer | مبلغ | توضیح\n/price شناسه | فروش | مصرف‌کننده\n/inventory_report");
   }
   return sendMessage(env, chatId, "دستورات کارمندی:\nورود (/vorud)\nخروج (/khoruj)\nوضعیت (/status)");
 }
