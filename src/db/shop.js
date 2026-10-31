@@ -31,13 +31,13 @@ export async function getSalesSummary(env, startIso) {
     `SELECT
        COUNT(*) AS sale_count,
        COALESCE(SUM(total_amount), 0) AS total,
-       COALESCE(SUM(CASE WHEN sale_type = 'credit' THEN total_amount ELSE 0 END), 0) AS credit_total
-     FROM sales WHERE created_at >= ?`
+       COALESCE(SUM(debt_amount), 0) AS credit_total
+     FROM sales WHERE datetime(created_at) >= datetime(?)`
   ).bind(startIso).all();
   const totals = results?.[0] || { sale_count: 0, total: 0, credit_total: 0 };
   const { results: methods } = await env.DB.prepare(
     `SELECT method, COALESCE(SUM(amount), 0) AS amount
-     FROM payments WHERE kind = 'sale' AND created_at >= ?
+     FROM payments WHERE kind = 'sale' AND datetime(created_at) >= datetime(?)
      GROUP BY method`
   ).bind(startIso).all();
   return { ...totals, methods: methods || [] };
@@ -47,7 +47,7 @@ export async function getApproxProfit(env, startIso) {
   const row = await env.DB.prepare(
     `SELECT COALESCE(SUM(si.line_total - (si.purchase_price_snapshot * si.qty)), 0) AS profit
      FROM sale_items si JOIN sales s ON s.id = si.sale_id
-     WHERE s.created_at >= ?`
+     WHERE datetime(s.created_at) >= datetime(?)`
   ).bind(startIso).first();
   return Number(row?.profit || 0);
 }
