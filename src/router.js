@@ -22,9 +22,10 @@ export async function routeUpdate(update, env) {
   if (!msg?.text || !msg.from) return;
 
   await ensureKnownUsers(env, msg.from);
-  const [head, ...args] = msg.text.trim().split(/\s+/);
-  const cmd = head.split("@")[0].toLowerCase();
-  const entry = COMMANDS.find((item) => item.names.includes(cmd));
+  const fullText = msg.text.trim().toLowerCase();
+  const [head, ...args] = fullText.split(/\s+/);
+  const cmd = head.split("@")[0];
+  const entry = COMMANDS.find((item) => item.names.includes(fullText) || item.names.includes(cmd));
   if (!entry) return;
 
   const user = await getUser(env, msg.from.id);
