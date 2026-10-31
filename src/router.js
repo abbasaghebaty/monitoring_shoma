@@ -5,7 +5,7 @@ import { handleCheckIn, handleCheckOut, handleStatus } from "./handlers/attendan
 import { handleAddUser, handleListUsers, handleReport, handleChart } from "./handlers/admin.js";
 import {
   handleProducts, handleProductAdd, handlePurchase, handleSale, handleDebtPayment,
-  handleReports, handlePriceUpdate,
+  handleReports, handlePriceUpdate, handleCustomerAdd, handleCustomers, handleShortage,
 } from "./handlers/shop.js";
 
 const COMMANDS = [
@@ -20,6 +20,9 @@ const COMMANDS = [
   { names: ["/weekly", "گزارش هفتگی"], run: (ctx) => handleReport({ ...ctx, days: 7 }), owner: true },
   { names: ["/chart", "نمودار"], run: handleChart, owner: true },
   { names: ["/products", "محصولات"], run: handleProducts, admin: true },
+  { names: ["/customer_add"], run: handleCustomerAdd, admin: true },
+  { names: ["/customers"], run: handleCustomers, admin: true },
+  { names: ["/shortage"], run: handleShortage, admin: true },
   { names: ["/product_add"], run: handleProductAdd, admin: true },
   { names: ["/purchase"], run: handlePurchase, admin: true },
   { names: ["/sale"], run: handleSale, admin: true },
