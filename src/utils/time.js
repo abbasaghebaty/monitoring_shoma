@@ -11,10 +11,8 @@ export function formatDate(iso = new Date().toISOString(), tz = "Asia/Tehran") {
 }
 
 export function formatDuration(minutes) {
-  const total = Math.max(0, Math.round(Number(minutes) || 0));
-  const h = Math.floor(total / 60);
-  const m = total % 60;
-  return h ? `${h} ساعت و ${m} دقیقه` : `${m} دقیقه`;
+  const total = Math.max(0, Number(minutes) || 0);
+  return `${(total / 60).toFixed(1).replace(".", "/")} ساعت`;
 }
 
 export function formatToman(amount) {
