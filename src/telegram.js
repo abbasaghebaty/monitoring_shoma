@@ -20,7 +20,7 @@ export const EMPLOYEE_KEYBOARD = {
 
 export const OWNER_KEYBOARD = {
   reply_markup: {
-    keyboard: [[{ text: "گزارش امروز" }, { text: "گزارش هفتگی" }], [{ text: "کاربران" }, { text: "نمودار" }]],
+    keyboard: [[{ text: "گزارش امروز" }, { text: "گزارش هفتگی" }], [{ text: "کاربران" }, { text: "نمودار" }], [{ text: "محصولات" }, { text: "گزارش مالی" }]],
     resize_keyboard: true,
   },
 };
