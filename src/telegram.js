@@ -14,7 +14,7 @@ export async function answerCallback(env, callbackQueryId) {
   if (!response.ok) console.error("Telegram answerCallbackQuery failed:", await response.text());
 }
 export const EMPLOYEE_KEYBOARD = {
-  reply_markup: { keyboard: [[{ text: "ورود" }, { text: "خروج" }], [{ text: "وضعیت" }, { text: "🧾 فروش و انبار" }]], resize_keyboard: true },
+  reply_markup: { keyboard: [[{ text: "ورود" }, { text: "خروج" }], [{ text: "وضعیت" }]], resize_keyboard: true },
 };
 export const OWNER_KEYBOARD = {
   reply_markup: { keyboard: [[{ text: "گزارش امروز" }, { text: "گزارش هفتگی" }], [{ text: "کاربران" }, { text: "نمودار" }], [{ text: "📦 فروش و انبار" }]], resize_keyboard: true },
