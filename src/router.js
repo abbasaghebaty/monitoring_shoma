@@ -7,8 +7,8 @@ import { handleAddUser, handleListUsers, handleReport, handleChart } from "./han
 const COMMANDS = [
   { names: ["/start"], run: handleStart, public: true },
   { names: ["/help", "راهنما"], run: handleHelp },
-  { names: ["/vorud", "/in", "ورود"], run: handleCheckIn },
-  { names: ["/khoruj", "/out", "خروج"], run: handleCheckOut },
+  { names: ["/vorud", "/in", "ورود", "🔵 ورود"], run: handleCheckIn },
+  { names: ["/khoruj", "/out", "خروج", "🔴 خروج"], run: handleCheckOut },
   { names: ["/status", "وضعیت"], run: handleStatus },
   { names: ["/users", "کاربران"], run: handleListUsers, owner: true },
   { names: ["/adduser"], run: handleAddUser, owner: true },
