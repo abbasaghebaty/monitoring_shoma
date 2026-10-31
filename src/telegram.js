@@ -24,3 +24,10 @@ export const OWNER_KEYBOARD = {
     resize_keyboard: true,
   },
 };
+
+export async function answerCallback(env, callbackQueryId) {
+  await fetch('https://api.telegram.org/bot' + env.BOT_TOKEN + '/answerCallbackQuery', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ callback_query_id: callbackQueryId }),
+  });
+}
