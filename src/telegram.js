@@ -9,7 +9,9 @@ export async function sendMessage(env, chatId, text, extra = {}) {
 
 export const EMPLOYEE_KEYBOARD = {
   reply_markup: {
-    keyboard: [[{ text: "ورود" }, { text: "خروج" }], [{ text: "وضعیت" }]],
+    // Telegram lays reply-keyboard buttons in array order from left to right.
+    // Therefore خروج is first (left) and ورود is second (right).
+    keyboard: [[{ text: "🔴 خروج" }, { text: "🔵 ورود" }], [{ text: "وضعیت" }]],
     resize_keyboard: true,
   },
 };
