@@ -7,13 +7,14 @@ Telegram attendance bot deployed on Cloudflare Workers with D1.
 - Employees: Abbas, Sadegh and both father's Telegram accounts. Each can only register their own check-in/check-out and view their own status.
 
 ## Deploy
-1. Configure secrets:
+1. Configure the Telegram bot token:
    - `npx wrangler secret put BOT_TOKEN`
-   - `npx wrangler secret put WEBHOOK_SECRET`
 2. Ensure the D1 database has been initialized with `schema.sql`:
    - `npx wrangler d1 execute shop-manager --remote --file=./schema.sql`
 3. Deploy:
    - `npx wrangler deploy`
+
+Webhook secret validation is disabled. Telegram webhook requests are accepted without the `X-Telegram-Bot-Api-Secret-Token` header.
 
 ## Owner commands
 - `/report`: today's attendance totals
