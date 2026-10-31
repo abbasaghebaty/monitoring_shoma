@@ -1,9 +1,9 @@
-name = "shop-manager-bot"
+name = "monitoring-shoma"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 
 [vars]
-OWNER_ID = "0"          # آیدی عددی تلگرام مالک را اینجا بگذار
+OWNER_ID = "602217153"
 TIMEZONE = "Asia/Tehran"
 
 [[d1_databases]]
@@ -11,6 +11,6 @@ binding = "DB"
 database_name = "shop-manager"
 database_id = "4e406079-a02f-4412-9167-57ca03b29f85"
 
-# Secrets (با wrangler secret put):
-#   BOT_TOKEN
-#   WEBHOOK_SECRET
+# Secrets:
+# npx wrangler secret put BOT_TOKEN
+# npx wrangler secret put WEBHOOK_SECRET
