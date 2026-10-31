@@ -1,4 +1,4 @@
-import { sendMessage, answerCallback } from "../telegram.js";
+import { sendMessage, editMessage, answerCallback } from "../telegram.js";
 import {
   listProducts, getProduct, listOpenDebts, getDebt, getSalesSummary,
   getApproxProfit, getShortages, getCurrentStockValue,
@@ -9,7 +9,12 @@ const TTL = 60 * 60 * 3;
 const sessionKey = (id) => `shop-session:${id}`;
 const admin = (env, id) => String(env.ADMIN_IDS || env.OWNER_ID || "")
   .split(",").map((x) => x.trim()).filter(Boolean).includes(String(id));
-const btn = (text, data) => ({ text, callback_data: data });
+const DANGER_WORDS = ["لغو", "انصراف"];
+const btn = (text, data) => {
+  const b = { text, callback_data: data };
+  if (DANGER_WORDS.some((w) => text.includes(w))) b.style = "danger";
+  return b;
+};
 const kb = (rows) => ({ reply_markup: { inline_keyboard: rows } });
 const digits = (value) => String(value ?? "")
   .replace(/[۰-۹]/g, (c) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(c)))
@@ -282,7 +287,11 @@ export async function handleShopCallback({ env, callback }) {
   const adminActions = new Set(["sh:menu:products","sh:menu:product_add","sh:menu:purchase","sh:menu:debtpay","sh:menu:customers","sh:menu:price","sh:menu:report","sh:product_save","sh:product_edit"]);
   if (adminActions.has(data) && !admin(env, uid)) return say(env, chatId, "⛔ دسترسی مدیر لازم است.");
   let state = await getSession(env, uid);
-  if (data === "sh:x") { await dropSession(env, uid); return say(env, chatId, "عملیات لغو شد."); }
+  if (data === "sh:x") {
+    await dropSession(env, uid);
+    const edited = await editMessage(env, chatId, callback.message.message_id, "عملیات لغو شد.", { reply_markup: { inline_keyboard: [] } });
+    return edited ? true : say(env, chatId, "عملیات لغو شد.");
+  }
   if (data === "sh:menu:sale" || data === "sh:new") return startFlow(env, chatId, uid, "sale_input");
   if (data === "sh:menu:product_add") return startFlow(env, chatId, uid, "product_add");
   if (data === "sh:menu:purchase") return startFlow(env, chatId, uid, "purchase_date");
