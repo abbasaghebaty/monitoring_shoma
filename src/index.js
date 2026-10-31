@@ -5,11 +5,6 @@ export default {
     if (request.method === "GET") return new Response("monitoring_shoma OK");
     if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
 
-    // Configure WEBHOOK_SECRET with: npx wrangler secret put WEBHOOK_SECRET
-    if (!env.WEBHOOK_SECRET || request.headers.get("X-Telegram-Bot-Api-Secret-Token") !== env.WEBHOOK_SECRET) {
-      return new Response("forbidden", { status: 403 });
-    }
-
     let update;
     try {
       update = await request.json();
