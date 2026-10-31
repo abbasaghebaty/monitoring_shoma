@@ -54,6 +54,7 @@ function parseItems(raw, purchase = false) {
 
 function parsePayments(raw, total) {
   if (!raw || raw.toLowerCase() === "credit" || raw === "0") return [];
+  if (METHODS.has(raw.toLowerCase())) return [{ method: raw.toLowerCase(), amount: total }];
   const entries = raw.split(";").map((x) => x.trim());
   const payments = entries.map((entry) => {
     const [method, amountRaw] = entry.split(":").map((x) => x.trim().toLowerCase());
@@ -102,7 +103,8 @@ export async function handlePurchase({ env, chatId, args }) {
   try {
     const [dateRaw, supplier, itemsRaw, note = ""] = splitFields(args.join(" "));
     if (!dateRaw || !itemsRaw) throw new Error("قالب: /purchase تاریخ-میلادی-YYYY-MM-DD | تأمین‌کننده یا - | شناسه:تعداد:خرید:فروش:مصرف;... | توضیح");
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dateRaw) || new Date(dateRaw + "T00:00:00Z").toISOString().slice(0, 10) !== dateRaw) {
+    const parsedDate = new Date(dateRaw + "T00:00:00Z");
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dateRaw) || Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== dateRaw) {
       throw new Error("تاریخ خرید باید معتبر و با قالب YYYY-MM-DD باشد.");
     }
     const items = parseItems(itemsRaw, true);
