@@ -124,7 +124,7 @@ export async function handlePurchase({ env, chatId, args }) {
     ];
     await env.DB.batch(statements);
     return sendMessage(env, chatId,
-      `✅ خرید ثبت شد\nشماره خرید: #${purchaseId}\nتأمین‌کننده: ${supplier && supplier !== "-" ? supplier : "ثبت نشده"}\nتعداد اقلام: ${items.length}\n💰 جمع خرید: ${formatToman(total)}\nموجودی محصولات طبق تریگر افزایش یافت.`
+      `✅ خرید ثبت شد\nشماره خرید: #${purchaseId}\nتاریخ: ${dateRaw}\nتأمین‌کننده: ${supplier && supplier !== "-" ? supplier : "ثبت نشده"}\nتعداد اقلام: ${items.length}\n💰 جمع خرید: ${formatToman(total)}\nموجودی محصولات طبق تریگر افزایش یافت.`
     );
   } catch (error) {
     return replyError(env, chatId, error);
