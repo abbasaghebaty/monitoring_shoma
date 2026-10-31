@@ -33,3 +33,19 @@ export async function todayMinutes(env, telegramId, sinceIso) {
   ).bind(telegramId, sinceIso).first();
   return Number(row?.m || 0);
 }
+
+export async function workedMinutesSince(env, telegramId, sinceIso) {
+  const { results } = await env.DB.prepare(
+    "SELECT check_in, check_out, duration_minutes FROM attendance WHERE telegram_id = ? AND (check_in >= ? OR check_out IS NULL)"
+  ).bind(telegramId, sinceIso).all();
+  const boundary = new Date(sinceIso).getTime();
+  const now = Date.now();
+  return (results || []).reduce((sum, row) => {
+    if (row.duration_minutes != null) return sum + Math.max(0, Number(row.duration_minutes));
+    if (!row.check_out) {
+      const start = Math.max(boundary, new Date(row.check_in).getTime());
+      return sum + Math.max(0, Math.round((now - start) / 60000));
+    }
+    return sum;
+  }, 0);
+}
